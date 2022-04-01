@@ -3,7 +3,10 @@ import Navigation from "./components/Navigation"
 import Field from "./components/Field"
 import Button from "./components/Button"
 import ManipulationPanel from "./components/ManipulationPanel"
+import Rules from "./components/Rules"
 import useSnakeGame from "./hooks/useSnakeGame"
+
+import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom"
 
 function App() {
   const {
@@ -17,7 +20,6 @@ function App() {
     updateDirection,
     updateDifficulty,
   } = useSnakeGame()
-
   return (
     <div className="App">
       <header className="header">
@@ -42,6 +44,10 @@ function App() {
         />
         <ManipulationPanel onChange={updateDirection} />
       </footer>
+      <BrowserRouter>
+        <NavLink to="/rules">ルール説明</NavLink>
+        <Rules />
+      </BrowserRouter>
     </div>
   )
 }
