@@ -20,7 +20,7 @@ const Navigation = ({
         </div>
       </div>
       <div className="navigation-item">
-        <span className="navigation-label">Difficulty: </span>{" "}
+        <span className="navigation-label">Difficulty: </span>
         <div className="navigation-item-number-container">
           <span className="num-board">{difficulty}</span>
           <div className="difficulty-button-container"></div>

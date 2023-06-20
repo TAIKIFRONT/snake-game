@@ -8,17 +8,17 @@ const Button = ({ onStart, status, onRestart, onStop }) => {
         <button className="btn btn-gameover" onClick={onRestart}>
           gameover
         </button>
-      )}{" "}
+      )}
       {status === GameStatus.init && (
         <button className="btn btn-init" onClick={onStart}>
           start
         </button>
-      )}{" "}
+      )}
       {status === GameStatus.suspended && (
         <button className="btn btn-suspended" onClick={onStart}>
           start
         </button>
-      )}{" "}
+      )}
       {status === GameStatus.playing && (
         <button className="btn btn-playing" onClick={onStop}>
           stop

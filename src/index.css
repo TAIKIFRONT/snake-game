@@ -1,8 +1,12 @@
 body {
   text-align: center;
+  background-image: url("https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2050&q=80");
+  background-size: cover;
+  height: 100;
 }
 
 .title-container {
+  background-color: #fff;
   border-radius: 4px 4px 0px 0px;
   box-shadow: 0px 4px 1px 1px #97a5a5, 0px 6px 1px 1px #3c4a4a,
     0px 0px 1px 1px #3c4a4a;

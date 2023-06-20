@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react";
 import {
   defaultInterval,
   defaultDifficulty,
@@ -10,133 +10,134 @@ import {
   DirectionKeyCodeMap,
   GameStatus,
   OppositeDirection,
-} from "../constants"
+} from "../constants";
 import {
   initFields,
   isCollision,
   isEatingMyself,
   getFoodPosition,
-} from "../utils"
+} from "../utils";
 
-let timer = null
+let timer = null;
 
 const unsubscribe = () => {
   if (!timer) {
-    return
+    return;
   }
-  clearInterval(timer)
-}
+  clearInterval(timer);
+};
 
 const useSnakeGame = () => {
-  const [fields, setFields] = useState(initialValues)
-  const [body, setBody] = useState([])
-  const [status, setStatus] = useState(GameStatus.init)
-  const [direction, setDirection] = useState(Direction.up)
-  const [difficulty, setDifficulty] = useState(defaultDifficulty)
-  const [tick, setTick] = useState(0)
+  const [fields, setFields] = useState(initialValues);
+  const [body, setBody] = useState([]);
+  const [status, setStatus] = useState(GameStatus.init);
+  const [direction, setDirection] = useState(Direction.up);
+  const [difficulty, setDifficulty] = useState(defaultDifficulty);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    setBody([initialPosition])
+    setBody([initialPosition]);
 
     // ゲームの中の時間を管理する
-    const interval = Difficulty[difficulty - 1]
+    const interval = Difficulty[difficulty - 1];
     timer = setInterval(() => {
-      setTick((tick) => tick + 1)
-    }, interval)
-    return unsubscribe
-  }, [difficulty])
+      setTick((tick) => tick + 1);
+    }, interval);
+    return unsubscribe;
+  }, [difficulty]);
 
   useEffect(() => {
     if (body.length === 0 || status !== GameStatus.playing) {
-      return
+      return;
     }
-    const canContinue = handleMoving()
+    const canContinue = handleMoving();
     if (!canContinue) {
-      unsubscribe()
-      setStatus(GameStatus.gameover)
+      unsubscribe();
+      setStatus(GameStatus.gameover);
     }
-  }, [tick])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tick]);
 
-  const start = () => setStatus(GameStatus.playing)
+  const start = () => setStatus(GameStatus.playing);
 
-  const stop = () => setStatus(GameStatus.suspended)
+  const stop = () => setStatus(GameStatus.suspended);
 
   const reload = () => {
     timer = setInterval(() => {
-      setTick((tick) => tick + 1)
-    }, defaultInterval)
-    setStatus(GameStatus.init)
-    setBody([initialPosition])
-    setDirection(Direction.up)
-    setFields(initFields(fields.length, initialPosition))
-  }
+      setTick((tick) => tick + 1);
+    }, defaultInterval);
+    setStatus(GameStatus.init);
+    setBody([initialPosition]);
+    setDirection(Direction.up);
+    setFields(initFields(fields.length, initialPosition));
+  };
 
   const updateDirection = useCallback(
     (newDirection) => {
       if (status !== GameStatus.playing) {
-        return
+        return;
       }
       if (OppositeDirection[direction] === newDirection) {
-        return
+        return;
       }
-      setDirection(newDirection)
+      setDirection(newDirection);
     },
     [direction, status]
-  )
+  );
 
   const updateDifficulty = useCallback(
     (difficulty) => {
       if (status !== GameStatus.init) {
-        return
+        return;
       }
       if (difficulty < 1 || difficulty > Difficulty.length) {
-        return
+        return;
       }
-      setDifficulty(difficulty)
+      setDifficulty(difficulty);
     },
     [status]
-  )
+  );
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      const newDirection = DirectionKeyCodeMap[e.keyCode]
+      const newDirection = DirectionKeyCodeMap[e.keyCode];
       if (!newDirection) {
-        return
+        return;
       }
-      updateDirection(newDirection)
-    }
-    document.addEventListener("keydown", handleKeyDown)
-    return () => document.removeEventListener("keydown", handleKeyDown)
-  }, [updateDirection])
+      updateDirection(newDirection);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [updateDirection]);
 
   const handleMoving = () => {
-    const { x, y } = body[0]
-    const delta = Delta[direction]
+    const { x, y } = body[0];
+    const delta = Delta[direction];
     const newPosition = {
       x: x + delta.x,
       y: y + delta.y,
-    }
+    };
     if (
       isCollision(fields.length, newPosition) ||
       isEatingMyself(fields, newPosition)
     ) {
-      return false
+      return false;
     }
-    const newBody = [...body]
+    const newBody = [...body];
     if (fields[newPosition.y][newPosition.x] !== "food") {
-      const removingTrack = newBody.pop()
-      fields[removingTrack.y][removingTrack.x] = ""
+      const removingTrack = newBody.pop();
+      fields[removingTrack.y][removingTrack.x] = "";
     } else {
-      const food = getFoodPosition(fields.length, [...newBody, newPosition])
-      fields[food.y][food.x] = "food"
+      const food = getFoodPosition(fields.length, [...newBody, newPosition]);
+      fields[food.y][food.x] = "food";
     }
-    fields[newPosition.y][newPosition.x] = "snake"
-    newBody.unshift(newPosition)
+    fields[newPosition.y][newPosition.x] = "snake";
+    newBody.unshift(newPosition);
 
-    setBody(newBody)
-    setFields(fields)
-    return true
-  }
+    setBody(newBody);
+    setFields(fields);
+    return true;
+  };
   return {
     body,
     difficulty,
@@ -147,7 +148,7 @@ const useSnakeGame = () => {
     reload,
     updateDirection,
     updateDifficulty,
-  }
-}
+  };
+};
 
-export default useSnakeGame
+export default useSnakeGame;
